@@ -15,22 +15,57 @@
 
     <script type="text/babel">
 
-        function Button() {
+        const buttonVariants = {
+            default: 'bg-gray-500',
+            primary: 'bg-purple-500'
+        }
+        /*
+        Uma maneira para organizar as propriedades é criando uma constante com um objeto que contém seus valores, é interessante que vc chame de variants para facilitar; Isso torna o código mais flexível e dinâmico.
+
+        Após isso, vc precisa passar como parâmetro um objeto que irá pegar o children(elementos herdados da function Button) e uma variável variant. Esta variant servirá como parâmetro para chamar um dos valores da const buttonVariants
+        
+        Como são propriedades style, tem que colocar no className do tailwindCSS unindo em um só objeto {}, e ao invés de aspas '', use acento agundo `` pois ele permite formatação dentro da string e é ai que vc irá chamar o buttonVariants usando a variante variant como index do vetor no objeto ${buttonVariants[variant]}, use ${}
+        */
+
+
+
+        function Button({ children , variant = 'default' , className}) { //pegará os elementos filhos dos buttons que aparecerá la no main na function App()
             return (
-                <button className="px-3 py-2 bg-purple-400 rounded text-white">
-                    Botão
+                <button className={`px-3 py-2 rounded text-white ${buttonVariants[variant]}
+                   ${className} 
+                    `}
+                {...props}
+                >
+                    {children}
                 </button>
+                //sem {} o framework entende que é um text e irá aprecer 'children', não esqueça do {} para herdar os elementos de mesma tag;
             )
+
+            // {...props}, vc está extendendo as demais propriedades dos elementos para uso, como o title do HTML por exemplo.
         }
 
+
+        /* <Button variant='default'> Meu botão </Button>
+            depois do mapeamento, fica fácil manipular as propriedades do style. 
+            Além disso, podemos definir um variant padrão, definindo o variant lá no function Button():
+
+                function Button({ children , variant = 'default'})
+
+        */
         function App(){
             return ( 
                 <main className="flex gap-2 p-3">
-                    <Button />
-                    <Button />
+                    <Button className='mr-2'>
+                        Meu botão
+                    </Button>
+                    <Button variant='primary'>
+                        Outro botão    
+                    </Button>
                 </main>
             )
         }
+
+        // Se eu por acaso, colocar um className no Button, ele pode reescrever as propriedades já definidas na function, e pra resolver isso p/ abrir espaço para mais modificações, vc extende ela no objeto de parâmetro e chama ela dentro da outra className, como tá lá em cima.
 
         ReactDOM.createRoot(document.getElementById('root')).render(
             <App />

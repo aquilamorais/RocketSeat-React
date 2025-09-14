@@ -25,10 +25,18 @@
 
         function App(){
             return ( 
+                //chama funçao Button dentro da tag main
+                /*O className vem do TailwindCSS, onde defini os componentes do style do elemento main, assim ele criará o elemento estilizado. */
                 <main className="flex gap-2 p-3">
                     <Button />
                     <Button />
                 </main>
+                /* Poderia simplesmente criar o button dentro da main:
+                    <button className="px-3 py-2 bg-purple-400 rounded text-white">
+                    Botão
+                    </button>
+                Mas pra manter o código limpo, cria uma função que retorna justamente a criação de um button, como o código acima
+                */
             )
         }
 
@@ -38,3 +46,4 @@
     </script>
 </body>
 </html>
+

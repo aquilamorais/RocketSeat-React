@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=div, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
+
 <body>
     <div id="root"></div>
 
@@ -27,14 +29,12 @@
         Como são propriedades style, tem que colocar no className do tailwindCSS unindo em um só objeto {}, e ao invés de aspas '', use acento agundo `` pois ele permite formatação dentro da string e é ai que vc irá chamar o buttonVariants usando a variante variant como index do vetor no objeto ${buttonVariants[variant]}, use ${}
         */
 
-
-
-        function Button({ children , variant = 'default' , className}) { //pegará os elementos filhos dos buttons que aparecerá la no main na function App()
+        function Button({ children, variant = 'default', className }) { //{children} pegará os elementos filhos dos buttons que aparecerá la no main na function App()
             return (
                 <button className={`px-3 py-2 rounded text-white ${buttonVariants[variant]}
                    ${className} 
                     `}
-                {...props}
+                    {...props}
                 >
                     {children}
                 </button>
@@ -52,14 +52,14 @@
                 function Button({ children , variant = 'default'})
 
         */
-        function App(){
-            return ( 
+        function App() {
+            return (
                 <main className="flex gap-2 p-3">
                     <Button className='mr-2'>
                         Meu botão
                     </Button>
                     <Button variant='primary'>
-                        Outro botão    
+                        Outro botão
                     </Button>
                 </main>
             )
@@ -72,4 +72,5 @@
         )
     </script>
 </body>
+
 </html>

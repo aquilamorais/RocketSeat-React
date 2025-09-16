@@ -45,7 +45,7 @@
   font-(--font-sans)
 -->
 
-<body className="text-(--text) font-(--font-sans)">
+<body class="text-(--text) font-(--font-sans)">
   <div id="root"></div>
 
   <script type="text/babel">
@@ -74,16 +74,53 @@
 
 
 
-    function Button() { }//em breve
+    function Button({ children, className, variant, ...props }) {
+      return (
+        <Text
+          as="button"
+          variant="heading"
+          className={
+            `flex items-center justify-center rounded-xl
+            p-3 cursor-pointer text-(--text)
+            bg-linear-(--gradient) hover:bg-linear-(--gradient-hover) shadow-(--shadow)
+            ${buttonVariants[variant]}
+            ${className ? className : ''}
+            `
+          }
+        >
+          {children}
+        </Text>
+      )
+    }
+
+    const buttonVariants = {
+      primary: "bg-(--primary)",
+      default: "bg-(--background)"
+    }
 
 
+    function Card({ children, className, ...props }) {
+      return (
+        <div
+          className={`bg-(--background) shadoe-(--shadow)
+            rounded-2xl ${className ? className : ''}`}
+        >
+          {children}
+        </div>
+      )
+    }
 
+    //agora a function Calculadora()
+    function Calculator() {
+
+    }
 
     function App() {
       return (
         <main className="py-28 px-4">
           <Text variant="muted">Hello World</Text>
-
+          <Button variant="default">CE</Button>
+          <Card>Teste</Card>
         </main>
       )
     }

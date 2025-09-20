@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=div, initial-scale=1.0">
+    <title>RocketSeat - React - Fundamentos</title>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        /* Os eventos são mais encapsulados na hora de codar, por exemplo, ao invés de colocarmos:
+            <button onClick="HandleClick()"> </button>
+            e depois fazer o script no js chamando AddEventListener();
+        No React, colocamos direto o onClick={handleClick} que o evento já ocorrerá de forma mais discreta.
+        */
+        function Alert1() {
+            function handleAlertClick() {
+                alert("uma mensagem aleatória")
+            }
+
+            return (<button type="button" onClick={handleAlertClick}>
+                Mostrar um Alerta
+            </button>)
+        }
+
+
+        /* Diferente do Alert1(), que era um alerta direto dentro da função handleAlertClick(), o do Alert2() possui um parâmetro que permitirá mais flexibilidade no código, pois estará recebendo a mensagem fora da construçao da função.
+        */
+        function Alert2() {
+            function handleAlertClick(msg) {
+                alert(msg)
+            }
+            return (
+                <button onClick={() => handleAlertClick('Uma mensagem de alerta!')}
+                >
+                    Mostrar Alerta com Parâmetro
+                </button>
+            )
+        }
+
+        /*
+            Sempre que for retornar mais de um elemento HTML use uma div para juntar ou usar um Fragmento <>.
+            Diferente do Alert2() no Alert3 você busca o texto que irá aparecer em outro elemento. Nesse caso, o button chama a função handleAlertClick, esta que irá pegar o parâmetro event e irá acessar o input. 
+            Primeiro, ele irá acessar o elemento ao lado do button
+            por meio do target(alvo) e pegando a propriedade previousSibling. Depois, pegando o valor value;
+            Depois, só chamar no onClick.  
+        */
+        function Alert3() {
+            function handleAlertClick(event) {
+                alert(event.target.previousSibling.value);
+            }
+
+            return (
+                <div>
+                    <input type="text " placeholder="Digite" />
+                    <button onClick={handleAlertClick}>Mostrar Alerta do Texto</button>
+                </div>
+            )
+        }
+
+        /*
+            Ao invés de usarmos a propriedade previousSibling, podemos somente usar o evento onChange no input (o elemento que irá ter o dado a ser coletado).
+            E depois no button dá o onClick. Depois que mudar o campo de texto ele irá atualizar o alert.
+        */
+        function Alert4() {
+            function handleAlertClick(event) {
+                alert(event.target.value)
+            }
+            return (
+                <div>
+                    <input type="text" placeholder="digite" onChange={handleAlertClick} />
+                    <button onClick={handleAlertClick}>Mostrar alertar usando onChange</button>
+                </div>
+            )
+        }
+
+
+        function App() {
+            return (
+                <main class="p-3">
+                    <Alert1 />
+                    <Alert2 />
+                </main>
+            )
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+    </script>
+</body>
+
+</html>

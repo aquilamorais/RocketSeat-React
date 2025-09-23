@@ -20,30 +20,46 @@
         Por exemplo:
         A função Counter além de armazenar variáveis, ela pega dados que o usuário inseriu e realiza sua lógica, pra depois, exibir na tela um resultado. Geralmente, em js puro, teria q usar classes e outras funções só para pegar os dados, e outro para exibir com um innerHTML. REACT Hooks facilita tudo isso.*/
 
+
         function Counter() {
+            /* 
+                Quando usar condicionais nos hooks, é possível ter 3 maneiras para isso:
+                A primeira seria criando um operador ternário, porém dentro de um elemento HTML para ser gerado caso atenda a condição. Aqui o react consegue envolver o script dentro do elemento:
+                    <p>
+                        {counter > 10 ? 'Verdadeiro' : 'Falso' }
+                    </p> Formato ternário
+                Nesse caso, é obrigatório o uso de chaves {}.
+    
+                Caso, for fazer a condicional fora de um elemento, ou até mesmo para criar o elemento pela condicional, além de ainda ser importante usar as {}, você pode usar o operador curto-circuito ( && ). Este operador, irá somente ter uma condição que caso não for atendida, será ignorado completamente:
+                    {counter > 20 && <p> Número passou de 20 </p>}
+                Com este && o elemento será criado na hora que a condição for atendida.
+    
+                Por último, existe o if clássico:
+                    if (counter = 30) {
+                        return <p> Opa, número chegou a 30 </p>
+                    }
+                Porém muito cuidado ao não envolver diretamente com os hooks, somente com os valores. Porque pode mudar a ordem dos estados.
+                
+                
+                */
             const [counter, setCounter] = React.useState(0);
 
-
-            return (
-                <>
-                    <p>Contador: {counter}</p>
-                    <button onClick={() => setCounter(10)}>Atualizar</button>
-                </>
-            )
-        }
-
-        /* A função Counter usa uma TUPLA para guardar variáveis.
-        A counter será usado para mostrar o dado do contador, e o setCounter será para inserir dados, porém ambas começam no estado 0. Por isso é atribuído para eles useState(0)
-        
-        Na tag Button, é usado o evento onClick para captar uma lógica que será aplicada ao pressionar o botão. Quando o Button for clicado, será adicionado o valor 10 pelo setCounter, logo será aplicado no counter na tela.*/
-
-        function CounterPrevValue() {
-            const [counter, setCounter] = React.useState(0);
+            if (counter > 30) {
+                return <p> Opa, número chegou a 30 </p>
+            }
 
             return (
                 <>
                     <p>Contador com PrevValue: {counter}</p>
                     <button onClick={() => setCounter(10)}>Atualizar</button>
+
+                    <p>
+                        {counter > 15 ? 'Número maior que 15' : 'Número menor do que 15'}
+                    </p>
+
+
+                    {counter > 20 && <p> Número passou de 20 </p>}
+
 
                     <button onClick={() => setCounter((prevValue) => prevValue + 1)}>
                         Incrementar
@@ -58,20 +74,11 @@
             )
         }
 
-        /*
-            Neste exemplo de useState podemos utilizar uma função anônima chamada prevValue.
-            Esta função anônima irá retornar o valor do estado interior. O que possibilita que em CounterPrevValue além de termos o Button Atualizar, que irá inserir o valor 10 no estado atual ( que está 0 ), também temos o Button Incrementar.
-            Este Incrementar irá chamar uma função anônima por meio do evento onClick, que terá o setCounter. Este setCounter terá outra função anônima com prevValue como parâmetro, e somará +1 a cada clique neste Button.
-            Dessa maneira, a partir deste exemplo, tornasse fácil a manipulação do useState.
-        
-        */
-
 
         function App() {
             return (
                 <main>
                     <Counter />
-                    <CounterPrevValue />
                 </main>
             )
         }

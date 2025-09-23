@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=div, initial-scale=1.0">
+    <title>RocketSeat - React - Fundamentos</title>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        /*Hooks são funções do REACT utilizado dinamicamente SOMENTE em funções, para usar recursos do REACT em componentes funcionais. Torna desnecessário criar classes.
+        
+        Por exemplo:
+        A função Counter além de armazenar variáveis, ela pega dados que o usuário inseriu e realiza sua lógica, pra depois, exibir na tela um resultado. Geralmente, em js puro, teria q usar classes e outras funções só para pegar os dados, e outro para exibir com um innerHTML. REACT Hooks facilita tudo isso.*/
+
+        function Counter() {
+            const [counter, setCounter] = React.useState(0);
+
+
+            return (
+                <>
+                    <p>Contador: {counter}</p>
+                    <button onClick={() => setCounter(10)}>Atualizar</button>
+                </>
+            )
+        }
+
+        /* A função Counter usa uma TUPLA para guardar variáveis.
+        A counter será usado para mostrar o dado do contador, e o setCounter será para inserir dados, porém ambas começam no estado 0. Por isso é atribuído para eles useState(0)
+        
+        Na tag Button, é usado o evento onClick para captar uma lógica que será aplicada ao pressionar o botão. Quando o Button for clicado, será adicionado o valor 10 pelo setCounter, logo será aplicado no counter na tela.*/
+
+        function CounterPrevValue() {
+            const [counter, setCounter] = React.useState(0);
+
+            return (
+                <>
+                    <p>Contador com PrevValue: {counter}</p>
+                    <button onClick={() => setCounter(10)}>Atualizar</button>
+
+                    <button onClick={() => setCounter((prevValue) => prevValue + 1)}>
+                        Incrementar
+                    </button>
+                </>
+            )
+        }
+
+        /*
+            Neste exemplo de useState podemos utilizar uma função anônima chamada prevValue.
+            Esta função anônima irá retornar o valor do estado interior. O que possibilita que em CounterPrevValue além de termos o Button Atualizar, que irá inserir o valor 10 no estado atual ( que está 0 ), também temos o Button Incrementar.
+            Este Incrementar irá chamar uma função anônima por meio do evento onClick, que terá o setCounter. Este setCounter terá outra função anônima com prevValue como parâmetro, e somará +1 a cada clique neste Button.
+            Dessa maneira, a partir deste exemplo, tornasse fácil a manipulação do useState.
+        
+        */
+
+        function App() {
+            return (
+                <main>
+                    <Counter />
+                    <CounterPrevValue />
+                </main>
+            )
+        }
+
+        // Só renderizar a função App() agora:
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=div, initial-scale=1.0">
+    <title>RocketSeat - React - Fundamentos</title>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        /*
+            A função Filter() manipula a DOM instantâneamente, te mostrando o resultado da filtragem.
+            Neste caso, é colocado uma função anônima com "name" como parâmetro onde vai formatar todos os nomes que você digitou e na hora de buscar em minúsculo, deixando mais inteligente.
+
+            Para ver isso funcionando na prática, cria um input de value {search} para uso do useState e onChange, este terá seu valor atribuído ao setSearch, por isso estava e.target.value, sendo "e" representando o input.
+        */
+        function ListNames() {
+            const [names] = React.useState(["Ana", "Bruno", "Carlos", "Juvencio"]);
+            const [search, setSearch] = React.useState("")
+            return (
+                <ul>
+                    <input type="text"
+                        placeholder="Buscar por nome."
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                    />
+                    {names
+                        .filter((name) =>
+                            name.toLowerCase().includes(search.toLowerCase())
+                        )
+                        .map((name, index) =>
+                            <li key={`${index}-${name}`}>{name}</li>
+                        )}
+                </ul>
+            )
+        }
+
+        function App() {
+            return (
+                <main class="p-3">
+                    <ListNames />
+                </main>
+            )
+        }
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+    </script>
+</body>
+
+</html>

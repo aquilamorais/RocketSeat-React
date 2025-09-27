@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=div, initial-scale=1.0">
+    <title>RocketSeat - React - Fundamentos</title>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        /*
+            Para exibir listas e gerenciar usamos a própria função map() do Java Script.
+            
+            Dentro de uma tupla, teremos "names" e ele vai receber um useState incial com um array de nomes.
+            A função retornará um elemento <ul></ul> e dentro dele cria a função map(). {names.map()}
+
+            Dentro da função map terá uma função anônima com os parâmetros name e index e receberá dentro dela uma <li> onde será listado todos os nomes da const names.
+            Para ficar mais preciso, utiliza uma key onde a formatação será nome por um index, melhorando a precisão da lista.
+        */
+        function ListNames() {
+            const [names] = React.useState(["Ana", "Bruno", "Carlos"]);
+            return (
+                <ul>
+                    {names.map((name, index) =>
+                        <li key={`${index}-${name}`}>{name}</li>
+                    )}
+                </ul>
+            )
+        }
+
+        function App() {
+            return (
+                <main class="p-3">
+                    <ListNames />
+                </main>
+            )
+        }
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+    </script>
+</body>
+
+</html>

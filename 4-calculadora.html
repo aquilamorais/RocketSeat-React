@@ -204,6 +204,14 @@
           return;
         }
 
+        //Este if irá permitir que a gente continue nossa operação calculando mais algarismos.
+        /*Se houver algum resultado no estado, irá verificar se NÃO é um número de fato. Esta verificação ocorrerá pelo operador ternário.
+          Se NÃO for um número, a operação irá continuar, porém ela mostrará o resultado e irá concantenar com o button que você clicou.
+          Exemplo: 1 + 1, se eu clicar + de novo para continuar a soma, ele irá retornar 2 + 1.
+          Se for um número, ele não fará nada e só permitirá adicionar mais caracteres.
+          Por fim, irá zerar o estado do result.
+          O ${input === "," ? "" : " "} serve para dar espaço para os algarismos que não terminarem com vírgula.
+        */
         if (result) {
           setOperation(isNaN(input))
             ? `${result}${input === "," ? "" : " "}${input}`
@@ -212,11 +220,18 @@
           return;
         }
 
+        //Irá tratar de juntar os números, quando forem decimais, com a vírgula.
+        /*
+          endsWith() literalmente vai pegar o último caractere que terminou a operação, nesse caso o ",";
+          Se a gente clicar em , e, ao mesmo tempo, esta operação NÃO tiver terminado com vírgula, ou seja, for um número:
+          a operação irá juntar com a ,;
+        */
         if (input === "," && !operation.endsWith(',')) {
           setOperation(`${operation},`);
           return;
         }
 
+        //A operação irá continuar, e o operador ternário no meio quer dizer que, se a operação terminar com vírgula os números juntam, se não adiciona um espaço.
         setOperation(`${operation}${operation.endsWith(',') ? "" : " "}${input}`)
       }
 

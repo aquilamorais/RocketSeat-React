@@ -87,6 +87,7 @@
             ${className ? className : ''}
             `
           }
+          {...props}
         >
           {children}
         </Text>
@@ -150,14 +151,14 @@
           <Text
             as="div"
             variant="muted"
-            className="flex items-center justify-end"
+            className="flex items-center justify-end h-7"
           >
-            {operation}
+            {result && operation}
           </Text>
-          <div className={`flex items-center justify-between
+          <div className={`flex items-center justify-between h-9
                 `}>
             <Text variant="muted">=</Text>
-            <Text variant="blast">{result}</Text>
+            <Text variant="blast">{result || operation}</Text>
           </div>
         </div>
       )
@@ -165,11 +166,67 @@
 
     //Aplicando o map() para gerar os botões da calculadora
     function Calculator() {
+
+      const [operation, setOperation] = React.useState('');
+      const [result, setResult] = React.useState('');
+      //Função que ocorrerá toda a operação da calculadora
+      function handleInputClick(input) {
+        //Vai zerar a operação e o resultado, os estados ficarão vazios ao defenir que o setOperation e o setResult sejam ""
+        //Nunca esqueça de dá return nos ifs
+        if (input === "C") {
+          setOperation("");
+          setResult("");
+          return;
+        }
+
+        //Vai zerar o resultado e voltará com a operação para o display de baixo, e o display retornará 2 caracteres.
+        //slice() irá retornar nosso array de volta de acordo com a modificação q a gente utilizar. os dois parâmetros que ele pede são o início e o fim do array.
+        //Queremos nossa operação deste o caractere no índice 0 da string e tire 2 caracteres da operação, por isso -2, para volta 2 índices.
+        if (input === "CE") {
+          setResult("");
+          setOperation(operation.slice(0, -2));
+          return;
+        }
+
+        //Ao pressionar o = a operação vai ser realizada pelo eval() e em seguida, vai transformar a , em um . caso a operação envolver decimais, e internacionalmente, os decimais são representados com .
+        /*
+          replace() irá converter a vírgula em ponto. /,/g -> pegará todas as vígulas ( /,/ dentro das barras para colocar o que quer selecionar) em escola global(g).
+          '.' -> o elemento que irá substituir a vírgula selecionada.
+
+          Na const parsedResult, irá pegar o valor de operationResult e transformará em string com o toString().
+          O ? serve para continuar com o código mesmo que a operação da esquerda dê null ou undefined, que no caso será o replace de novo.
+          Este replace() irá transformar o . em , novamente. O ponto sozinho entre as duas barras /./ não representa um ponto de fato dentro da string, e para resolver isso usa a barra invertida (\.)
+        */
+        if (input === "=") {
+          const operationResult = eval(operation.replace(/,/g, '.'));
+          const parsedResult = operationResult.toString()?.replace(/\./g, ',');
+          setResult(parsedResult);
+          return;
+        }
+
+        if (result) {
+          setOperation(isNaN(input))
+            ? `${result}${input === "," ? "" : " "}${input}`
+            : input;
+          setResult("");
+          return;
+        }
+
+        if (input === "," && !operation.endsWith(',')) {
+          setOperation(`${operation},`);
+          return;
+        }
+
+        setOperation(`${operation}${operation.endsWith(',') ? "" : " "}${input}`)
+      }
+
       return (
         <Card className={`flex flex-col gap-[1.625rem]
           w-[22.25rem] pt-14 px-8 pb-8
           `}>
-          <CalculatorDisplay operation="1+1" result="2" />
+
+          <CalculatorDisplay operation={operation} result={result} />
+
           <div className="flex flex-col gap-3">
             {buttons.map((row, index) => (
               /* 
@@ -191,9 +248,18 @@
 
               <div className="flex gap-3" key={`row-${index}`}>
                 {row.map(button => (
+
                   <Button className={button.className || "w-16 h-16"}
                     key={button.input}
                     variant={button.variant}
+                    onClick={
+                      /*
+                      Se chamar a função assim: onClick={HandleInputClick}
+                      Não vai funcionar, porque a função tem o parâmetro "input".
+                      Por isso é chamado por meio de uma arrow function
+                      */
+                      () => handleInputClick(button.input)
+                    }
                   >
                     {button.input}
                   </Button>

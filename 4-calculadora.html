@@ -181,10 +181,10 @@
 
         //Vai zerar o resultado e voltará com a operação para o display de baixo, e o display retornará 2 caracteres.
         //slice() irá retornar nosso array de volta de acordo com a modificação q a gente utilizar. os dois parâmetros que ele pede são o início e o fim do array.
-        //Queremos nossa operação deste o caractere no índice 0 da string e tire 2 caracteres da operação, por isso -2, para volta 2 índices.
+        //Queremos nossa operação deste o caractere no índice 0 da string e tire 1 caracteres da operação, por isso -1, para volta 1 índice.
         if (input === "CE") {
           setResult("");
-          setOperation(operation.slice(0, -2));
+          setOperation(operation.slice(0, -1));
           return;
         }
 
@@ -210,11 +210,11 @@
           Exemplo: 1 + 1, se eu clicar + de novo para continuar a soma, ele irá retornar 2 + 1.
           Se for um número, ele não fará nada e só permitirá adicionar mais caracteres.
           Por fim, irá zerar o estado do result.
-          O ${input === "," ? "" : " "} serve para dar espaço para os algarismos que não terminarem com vírgula.
+         
         */
         if (result) {
           setOperation(isNaN(input))
-            ? `${result}${input === "," ? "" : " "}${input}`
+            ? `${result}${input}`
             : input;
           setResult("");
           return;
@@ -231,8 +231,8 @@
           return;
         }
 
-        //A operação irá continuar, e o operador ternário no meio quer dizer que, se a operação terminar com vírgula os números juntam, se não adiciona um espaço.
-        setOperation(`${operation}${operation.endsWith(',') ? "" : " "}${input}`)
+        //A operação irá continuar.
+        setOperation(`${operation}${input}`)
       }
 
       return (

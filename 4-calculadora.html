@@ -110,6 +110,37 @@
       )
     }
 
+    const buttons = [
+      [
+        { input: "CE" },
+        { input: "C", className: "flex-1 h-16" },
+        { input: "/", variant: "primary" }
+      ],
+      [
+        { input: "7" },
+        { input: "8" },
+        { input: "9" },
+        { input: "*", variant: "primary" }
+      ],
+      [
+        { input: "4" },
+        { input: "5" },
+        { input: "6" },
+        { input: "-", variant: "primary" }
+      ],
+      [
+        { input: "1" },
+        { input: "2" },
+        { input: "3" },
+        { input: "+", variant: "primary" }
+      ],
+      [
+        { input: "0", className: "flex-1 h-16" },
+        { input: "," },
+        { input: "=", variant: "primary" }
+      ]
+    ]
+
     //função para mostrar no display o resultado
     function CalculatorDisplay({ result, operation }) {
       return (
@@ -132,44 +163,43 @@
       )
     }
 
-    //agora a function Calculadora()
+    //Aplicando o map() para gerar os botões da calculadora
     function Calculator() {
       return (
         <Card className={`flex flex-col gap-[1.625rem]
           w-[22.25rem] pt-14 px-8 pb-8
           `}>
           <CalculatorDisplay operation="1+1" result="2" />
-
           <div className="flex flex-col gap-3">
-            <div className="flex gap-3">
-              <Button className="w-16 h-16">CE</Button>
-              <Button className="flex-1 h-16">C</Button>
-              <Button className="w-16 h-16" variant="primary">/</Button>
-            </div>
-            <div className="flex gap-3">
-              <Button className="w-16 h-16">7</Button>
-              <Button className="w-16 h-16">8</Button>
-              <Button className="flex-1 h-16">9</Button>
-              <Button className="flex-1 h-16" variant="primary">*</Button>
-            </div>
-            <div className="flex gap-3">
-              <Button className="w-16 h-16">4</Button>
-              <Button className="w-16 h-16">5</Button>
-              <Button className="flex-1 h-16">6</Button>
-              <Button className="flex-1 h-16" variant="primary">-</Button>
-            </div>
-            <div className="flex gap-3">
-              <Button className="w-16 h-16">1</Button>
-              <Button className="w-16 h-16">2</Button>
-              <Button className="flex-1 h-16">3</Button>
-              <Button className="flex-1 h-16" variant="primary">+</Button>
-            </div>
-            <div className="flex gap-3">
-              <Button className="flex-1 h-16">0</Button>
-              <Button className="w-16 h-16">,</Button>
-              <Button className="w-16 h-16" variant="primary">=</Button>
-            </div>
+            {buttons.map((row, index) => (
+              /* 
+              Dentro de map() vai ter uma arrow function com parâmetros "row" para indicar as linhas que vai ser organizado os buttons e o "index" para facilitar na ordem de mapeamento.
+              O map() vai gerar divs de cada bloco de objeto definido na const buttons lá em cima.
+              Cada div dessa terá uma key que vai ligar cada row com um index (para não perder a ordem, uma maneira q funciona para dados estáticos).
+              
+              Conforme vai gerando cada div, estas terão outro map() dentro delas.
+              Esses map() terão uma variável button atribuída de uma arrow function, este button indica cada elemento/objeto que o map() mapeará da const buttons.
+              Significa que, cada button se tornará um elemento button de fato por meio da função <Button></Button>.
 
+              Dentro destes <Button>, terá como formatação uma condição curto-circuito ( || ) no className.
+              Este className permite uma extesão de prop, em que se não tiver uma className já predefinida dentro desse objeto/elemento (como o botão 0, por exemplo que é maior e tem predefinido uma largura) o button terá como formato "w-16 h-16".
+              Key={} terá button.input como forma de organizar o mapeamento, o valor de cada input dentro de cada button.
+              variant={} terá como valor inicial o button.variant, ou seja, a variante que já tem de cada input.
+
+              Por fim, dentro dos nossos Buttons, renderizará {button.input}, isto é, o valor de cada input que a variável button está pegando de cada elemento do objeto lá de const buttons
+              */
+
+              <div className="flex gap-3" key={`row-${index}`}>
+                {row.map(button => (
+                  <Button className={button.className || "w-16 h-16"}
+                    key={button.input}
+                    variant={button.variant}
+                  >
+                    {button.input}
+                  </Button>
+                ))}
+              </div>
+            ))}
           </div>
         </Card>
       )

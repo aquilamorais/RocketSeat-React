@@ -15,15 +15,21 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script type="text/babel">
+        //Uma forma de passar dados entre os componentes sem precisar passar os props manualmente com o extends e hierarquização é com Context
+        //Criamos o CounterContext (letra maíuscula pois é componente do react)
         const CounterContext = React.createContext();
 
         function CounterProvider({ children }) {
+            //o useState vai ser um array vazio, pois irá receber os valores conforme a api recebe os dados
             const [savedCounts, setSavedCounts] = React.useState([]);
 
+            //saveCount irá atualizar este array, cria-se uma nova lista onde irá pegar toda a lista anterior pelo ...prev, e adicionar o count.
             function saveCount(count) {
                 setSavedCounts((prev) => [...prev, count])
             }
 
+            //iremos retornar o Context usando sua forma de provedor. Prover os dados novamente quando requisitado.
+            //como objeto, irá pegar da função saveCount onde é setado a nova array atualizada e o savedCounts onde estará o estado deste array.
             return (
                 <CounterContext.Provider
                     value={{ savedCounts, saveCount }}
@@ -32,6 +38,7 @@
                 </CounterContext.Provider>
             )
         }
+
         function Counter() {
             const [counter, setCounter] = React.useState(0);
 
@@ -46,6 +53,8 @@
 
         function CounterPrevValue() {
             const [counter, setCounter] = React.useState(0);
+            //Chamamos o saveCount(setSavedCount), que é global quando retornamos lá em cima, atribuímos a ela o contexto.
+            //Dentro de useContext() vai exatamente o CounterContext, este que cria o contexto.
             const { saveCount } = React.useContext(CounterContext);
 
             return (
@@ -61,11 +70,17 @@
                     >Salvar</button>
                 </>
             )
+            //No button Salvar recebe a prop onClick={}, pois é com ele que usaremos o nosso contexto.
+            //Dentro do onClick, recebe justamente a const saveCount, pois é esta que irá instanciar o useContext.
+            //Está como arrow function pois saveCount() recebe o parâmetro counter.
         }
 
         function CounterList() {
+            //Esta função irá mostrar na página os valores salvos e requisitados do contexto.
+            //Acessaremos as funções pelo savedCounts, então exporte ele com os {} e chame o contexto, useContext.
             const { savedCounts } = React.useContext(CounterContext);
 
+            //retornará uma lista ul onde a função map() mapeará os valores de savedCounts (o estado onde se encontra o arraw de valores) um a um com ajuda de uma key, para mais precisão, na página web.
             return (
                 <div>
                     <h2>Valores Salvos</h2>
@@ -81,6 +96,7 @@
 
         }
 
+        //No app, abrimos e fechamos o CounterProvider e colocamos as funções que o usarão dentro dele. Permitindo que, na hierarquia, passe a ele os dados e ele depois possa prover para todos.
         function App() {
             return (
                 <main>

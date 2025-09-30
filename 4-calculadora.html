@@ -142,6 +142,25 @@
       ]
     ]
 
+    //Aplicando a API Context
+    //Explicação no 10-api-contexto.html
+    const CalculatorContext = React.createContext();
+    function CalculatorProvider({ children }) {
+      const [history, setHistory] = React.useState([]);
+
+      function updateHistory(operation, parsedResult) {
+        setHistory((prev) => [...prev, `${operation}=${parsedResult}`]);
+      }
+
+      return (
+        <CalculatorContext.Provider
+          value={{ history, updateHistory }}
+        >
+          {children}
+        </CalculatorContext.Provider>
+      )
+    }
+
     //função para mostrar no display o resultado
     function CalculatorDisplay({ result, operation }) {
       return (
@@ -170,6 +189,10 @@
       const [operation, setOperation] = React.useState('');
       const [result, setResult] = React.useState('');
       //Função que ocorrerá toda a operação da calculadora
+      const { updateHistory } = React.useContext(CalculatorContext);
+      //Chamamos a função global que irá atualizar a lista no useState e atribuímos o Context nela.
+
+
       function handleInputClick(input) {
         //Vai zerar a operação e o resultado, os estados ficarão vazios ao defenir que o setOperation e o setResult sejam ""
         //Nunca esqueça de dá return nos ifs
@@ -201,6 +224,10 @@
           const operationResult = eval(operation.replace(/,/g, '.'));
           const parsedResult = operationResult.toString()?.replace(/\./g, ',');
           setResult(parsedResult);
+
+          updateHistory(operation, parsedResult);
+          //Quando clicar em = a lista irá receber mais um dado e será atualizado no Context.
+
           return;
         }
 
@@ -292,13 +319,18 @@
         sm:items-stretch gap-2
         sm:px-10  
           `}>
-          <Calculator />
-          <OperationHistory />
+          <CalculatorProvider>
+            <Calculator />
+            <OperationHistory />
+          </CalculatorProvider>
         </main>
       )
     }
 
     function OperationHistory() {
+      //Aplicando o Context para gerar uma lista de operações já realizadas;
+      const { history } = React.useContext(CalculatorContext);
+
       return (
         <Card className="py-10 px-8 w-full">
           <Text className="mb-4"
@@ -308,9 +340,13 @@
             Histórico de Operações
           </Text>
           <ul className="flex flex-col gap-3">
-            <Text as="li">1 + 1 = 2</Text>
-            <Text as="li">13 * 1 = 13</Text>
-            <Text as="li">1 + 5 = 6</Text>
+            {history.map((value, index) =>
+              <Text
+                key={`item - ${index}`}
+              >
+                {value}
+              </Text>
+            )}
           </ul>
         </Card>
       )

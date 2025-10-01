@@ -20,6 +20,13 @@
 
             const [name, setName] = React.useState('');
 
+            //useEffect irá executar e criar um efeito colateral para componentes no React.
+            //Este mais simples irá mostrar no console quando um elemento é criado ou surge, nesse caso, quando atualizamos o contador.
+            //Irá aparecer somente uma vez após o primeiro render de tal elemento.
+            //Sempre será usando funções anônimas ou arrow functions, pois precisamos executar algo.
+            //Agora quando retornamos uma função como callback, ela virá como unmount, ou seja, aparecerá quando tal componente for destruído. Encerrando seu ciclo de vida.
+            //no useEffect temos dois parâmetros, o segundo representa a dependência daquele useEffect. Sem isso, a hook pode entrar em loop infinito. Então passe uma dependência mesmo que seja só uma lista vazia.
+            //Uma lista vazia significa um unmount, uma destruição.
             React.useEffect(() => {
                 console.log('Componente montado!')
 
@@ -28,16 +35,24 @@
                 }
             }, [])
 
+            //Este exemplo contêm uma dependência [counter].
+            //Executará quando o counter mudar
             React.useEffect(() => {
                 if (counter > 0) {
                     console.log(`Contador atualizado: ${counter}`)
                 }
             }, [counter])
 
+            //Este contém múltiplas dependências [counter, name]
+            //Executará quando o counter ou name mudar.
+            //Diferente do anterior, só este irá executar por causa do name, já que é uma dependência a mais.
             React.useEffect(() => {
                 console.log('Contador ou nome atualizados');
             }, [counter, name]);
 
+            //Exemplo prático, criamos um useState com name e setName;
+            //Toda vez que escrevermos algo no input, ele pegará o value com o onChange e atribuirá com o setName.
+            //O useState detectará a mudança do componente executará seu primeiro parâmetro, o mount. No caso, este Effect anterior pois só ele tem o name como dependência.
             return (
                 <>
                     <div>
@@ -67,6 +82,12 @@
             )
         }
 
+        //Criamos um useState em app com o valor true incialmente.
+        //A ideia é, ao criarmos o button, mostrar o esconder toda a interface de botões quando clicarmos neste button.
+        //Utilizamos um arrow function, dentro do onClick, e setamos dentro do setShow um valor oposto ao true. O false.
+        //Em seguida, colocaremos a condição no <Counter /> logo abaixo, com uma condição curto-circuito.
+
+        //Quem executará neste caso, será o useEffect que contém o unmount do componente Counter, o que retornar como callback a mensagem de que o componente foi desmontado.
         function App() {
             const [show, setShow] = React.useState(true);
             return (

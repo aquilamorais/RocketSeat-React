@@ -154,7 +154,7 @@
       //Toda vez que a página inicar, irá buscar no localStorage o histórico das operações, por meio do getItem para a const savedHistory
       //Em seguida, atualizará no useState do history, um arquivo json que formatará o return que irá vir da function updateHistory.
       //A condição || '[]' é pra verificar se o usuário já tem dados salvos ou não(user novo), se não tiver dados, criará uma lista vazia.
-      React.useEffects(() => {
+      React.useEffect(() => {
         const savedHistory = localStorage.getItem(historyStorageKey);
         setHistory(JSON.parse(savedHistory || '[]'))
       }, [])

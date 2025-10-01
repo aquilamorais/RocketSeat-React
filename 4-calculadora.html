@@ -203,17 +203,15 @@
       )
     }
 
-    //Aplicando o map() para gerar os botões da calculadora
-    function Calculator() {
-
+    //Hook costumizada para facilitar nossa organização de código.
+    function useCalculator() {
       const [operation, setOperation] = React.useState('');
       const [result, setResult] = React.useState('');
       //Função que ocorrerá toda a operação da calculadora
       const { updateHistory } = React.useContext(CalculatorContext);
       //Chamamos a função global que irá atualizar a lista no useState e atribuímos o Context nela.
 
-
-      function handleInputClick(input) {
+      function doOperation(input) {
         //Vai zerar a operação e o resultado, os estados ficarão vazios ao defenir que o setOperation e o setResult sejam ""
         //Nunca esqueça de dá return nos ifs
         if (input === "C") {
@@ -282,6 +280,23 @@
         setOperation(`${operation}${input}`)
       }
 
+
+      return {
+        operation,
+        result,
+        doOperation
+      }
+    }
+
+    //Aplicando o map() para gerar os botões da calculadora
+    function Calculator() {
+
+      const { operation, result, doOperation } = useCalculator();
+
+      function handleInputClick(input) {
+        //Veio da Custom Hook useCalculator;
+        doOperation(input);
+      }
       return (
         <Card className={`flex flex-col gap-[1.625rem]
           w-[22.25rem] pt-14 px-8 pb-8
